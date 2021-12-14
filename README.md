@@ -40,7 +40,7 @@ Continue con la descarga del código cuando tenga las dependencias instaladas y 
 Para descargar el código, lo más conveniente es que realice un `fork` de este proyecto a su cuenta personal haciendo click en [este link](https://github.com/LucianoSmith/app-fullstack-base/fork). Una vez que tenga el fork a su cuenta, descarguelo con este comando:
 
 ```
-git clone https://github.com/LucianoSmith/app-fullstack-base.git
+git clone https://github.com/LucianoSmith/TPFINAL_DAW.git
 ```
 
 > En caso que no tenga una cuenta en Github puede clonar directamente este repo.
