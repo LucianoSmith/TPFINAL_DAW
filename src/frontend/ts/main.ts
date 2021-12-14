@@ -1,7 +1,5 @@
 declare const M;
-declare const ip = "localhost";
-//declare const ip = "172.16.4.133";
-
+// my ip "localhost" o "172.16.4.133";
 
 // Draws smart home devices on the home map
 function  drawDevices(): void {
@@ -26,9 +24,10 @@ function  drawDevices(): void {
             }
         }
     }
-    xml.open("GET", "http://"+ip+":8000/devices", true);
+    xml.open("GET", "http://172.16.4.133:8000/devices", true);
     xml.send();
 }
+
 
 // Shows a list with all the information of the devices
 function deviceList() {
@@ -54,7 +53,7 @@ function deviceList() {
             }
         }
     }
-    xml.open("GET", "http://"+ip+":8000/devices", true);
+    xml.open("GET", "http://172.16.4.133:8000/devices", true);
     xml.send();         
 }
 
@@ -71,7 +70,7 @@ function deleteDevice(id) {
             }
         }
     }
-    xml.open("DELETE", "http://"+ip+":8000/delete/"+id, true);
+    xml.open("DELETE", "http://172.16.4.133:8000/delete/"+id, true);
     xml.send();     
 }
 
@@ -127,7 +126,7 @@ function showInfo(id : number){
             }
         }
     }
-    xml.open("GET", "http://"+ip+":8000/info/"+id, true);
+    xml.open("GET", "http://172.16.4.133:8000/info/"+id, true);
     xml.send(); 
 }
 
@@ -162,7 +161,7 @@ function updateDevice(id) {
                 }
             }
         }
-        xml.open("POST", "http://"+ip+":8000/update", true);
+        xml.open("POST", "http://172.16.4.133:8000/update", true);
         xml.setRequestHeader("Content-Type", "application/json");
         let body = '{"id": "'+id+'", "name": "'+u_name.value+'", "description": "'+u_desc.value+'", "type": -1, "state": -1, "posx": '+u_posx.value+', "posy": '+u_posy.value+'}'; 
         xml.send(body);  
@@ -198,7 +197,7 @@ function newDevice() {
             }
         }
         let body = '{"name": "'+n_name+'", "description": "'+n_desc+'", "type": '+n_type+', "state": 0, "posx": '+n_posx+', "posy": '+n_posy+'}'; 
-        xml.open("POST", "http://"+ip+":8000/new", true);
+        xml.open("POST", "http://172.16.4.133:8000/new", true);
         xml.setRequestHeader("Content-Type", "application/json");
         xml.send(body);  
     }         
@@ -217,7 +216,7 @@ function changeStatus(cb, id, type: number) {
             }
         }
     }
-    xml.open("POST", "http://"+ip+":8000/update", true);
+    xml.open("POST", "http://172.16.4.133:8000/update", true);
     xml.setRequestHeader("Content-Type", "application/json");
     let body = "";
     if (type==0) {
@@ -228,10 +227,60 @@ function changeStatus(cb, id, type: number) {
     xml.send(body);  
 }
 
+
+class main {
+    private lista:Array<Device> = new Array(); 
+
+    constructor(n:string) {
+        this.drawDevices();
+    }
+
+    public requestGET(url: string, lister) {
+        let xml = new XMLHttpRequest();
+    
+            xml.onreadystatechange = function respustaServidor() {            
+                if (xml.readyState == 4) {
+                    if (xml.status == 200) {
+                        lister.handlerGetResponse(xml.status, xml.responseText);
+                    } else {
+                        alert("HTTP Request Error - url "+ url);
+                    }
+                }
+            }
+          
+            xml.open("GET",url, true);
+            xml.send();
+      }
+
+    public handlerGetResponse(status: number, response: string) {
+        
+        let respuestaObj: Array<Device> = JSON.parse(response);
+        for(let i = 0; i in respuestaObj; i++) {
+            this.lista.push(new Device(respuestaObj[i].id, respuestaObj[i].name, respuestaObj[i].description, respuestaObj[i].type, respuestaObj[i].state, respuestaObj[i].posx, respuestaObj[i].posy));
+        }
+        let houseDraw = document.getElementById("houseDraw");
+        houseDraw.innerHTML = "";
+        // Draw the device circles and bind them with the showInfo(id) function
+        for(let obj in this.lista) {
+            this.lista[obj].listDevices();
+            // red color: device off
+            // green color: device on 
+            let c = 'red';
+            if (this.lista[obj].state>0) c='green';  
+            let s: string = '<circle id="c'+ this.lista[obj].id+'" onclick="showInfo(' + this.lista[obj].id + ');" class="l1 modal-trigger" cx="' + this.lista[obj].posx + '" cy="' + this.lista[obj].posy + '" r="3" fill="'+c+'" stroke="white" stroke-width="1" href="#show" style="cursor: pointer;" />';
+            houseDraw.innerHTML = houseDraw.innerHTML + s;   
+        }
+        
+    }
+ 
+    // Draws smart home devices on the home map
+    private drawDevices() {
+        this.requestGET("http://172.16.4.133:8000/devices", this);
+    }
+}
+
 // On load function
 window.onload = function inicio() {
-    
+    let devicesMain: main = new main("smart_home");
     M.AutoInit();
-    drawDevices();
-
 }
