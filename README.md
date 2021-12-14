@@ -1,5 +1,5 @@
 <a href="https://www.gotoiot.com/">
-    <img src="doc/doc/gotoiot-logo.png" alt="logo" title="Goto IoT" align="right" width="60" height="60" />
+    <img src="doc/gotoiot-logo.png" alt="logo" title="Goto IoT" align="right" width="60" height="60" />
 </a>
 
 Smart Home Web App
@@ -17,7 +17,7 @@ El backend esta programado con `NodeJS` y se conecta con una `base de datos` MyS
 
 En esta imagen se puede observar la pantalla principal de la aplicacion.
 
-![architecture](screen01.png)
+![architecture](doc/screen01.png)
 
 ## Comenzando 🚀
 
