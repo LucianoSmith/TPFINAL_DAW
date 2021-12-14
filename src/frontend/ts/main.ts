@@ -1,5 +1,5 @@
 declare const M;
-// my ip "localhost" o "172.16.4.133";
+// my ip "172.16.4.133" o "localhost";
 
 // Draws smart home devices on the home map
 function  drawDevices(): void {
@@ -24,7 +24,7 @@ function  drawDevices(): void {
             }
         }
     }
-    xml.open("GET", "http://172.16.4.133:8000/devices", true);
+    xml.open("GET", "http://localhost:8000/devices", true);
     xml.send();
 }
 
@@ -53,7 +53,7 @@ function deviceList() {
             }
         }
     }
-    xml.open("GET", "http://172.16.4.133:8000/devices", true);
+    xml.open("GET", "http://localhost:8000/devices", true);
     xml.send();         
 }
 
@@ -70,7 +70,7 @@ function deleteDevice(id) {
             }
         }
     }
-    xml.open("DELETE", "http://172.16.4.133:8000/delete/"+id, true);
+    xml.open("DELETE", "http://localhost:8000/delete/"+id, true);
     xml.send();     
 }
 
@@ -126,7 +126,7 @@ function showInfo(id : number){
             }
         }
     }
-    xml.open("GET", "http://172.16.4.133:8000/info/"+id, true);
+    xml.open("GET", "http://localhost:8000/info/"+id, true);
     xml.send(); 
 }
 
@@ -161,7 +161,7 @@ function updateDevice(id) {
                 }
             }
         }
-        xml.open("POST", "http://172.16.4.133:8000/update", true);
+        xml.open("POST", "http://localhost:8000/update", true);
         xml.setRequestHeader("Content-Type", "application/json");
         let body = '{"id": "'+id+'", "name": "'+u_name.value+'", "description": "'+u_desc.value+'", "type": -1, "state": -1, "posx": '+u_posx.value+', "posy": '+u_posy.value+'}'; 
         xml.send(body);  
@@ -197,7 +197,7 @@ function newDevice() {
             }
         }
         let body = '{"name": "'+n_name+'", "description": "'+n_desc+'", "type": '+n_type+', "state": 0, "posx": '+n_posx+', "posy": '+n_posy+'}'; 
-        xml.open("POST", "http://172.16.4.133:8000/new", true);
+        xml.open("POST", "http://localhost:8000/new", true);
         xml.setRequestHeader("Content-Type", "application/json");
         xml.send(body);  
     }         
@@ -216,7 +216,7 @@ function changeStatus(cb, id, type: number) {
             }
         }
     }
-    xml.open("POST", "http://172.16.4.133:8000/update", true);
+    xml.open("POST", "http://localhost:8000/update", true);
     xml.setRequestHeader("Content-Type", "application/json");
     let body = "";
     if (type==0) {
@@ -275,7 +275,7 @@ class main {
  
     // Draws smart home devices on the home map
     private drawDevices() {
-        this.requestGET("http://172.16.4.133:8000/devices", this);
+        this.requestGET("http://localhost:8000/devices", this);
     }
 }
 
